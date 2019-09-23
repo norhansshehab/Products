@@ -1,0 +1,43 @@
+
+
+  <h1 class="display-4 text-center">Features</h1>
+  <hr/>
+<div class="row">
+
+    <form class="col-md-5 mb-5">
+      <div class="form-group">
+        
+        <label>Feature Name</label>
+        <input type="text" class="form-control" placeholder="Enter Feature Name ..." [(ngModel)]="newfeature.FeatureName" name="FeatureName" required />
+  
+    </div>
+  
+      <button [disabled]="flag" class="btn btn-primary mr-3" (click)="AddNewFeature()">Add New Feature</button>
+      <button [disabled]="!flag" class="btn btn-info" (click)="UpdateFeature()">Update</button>
+  
+    </form>
+  
+    <table class="table table-responsive table-hover col-md-7">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Feature Name</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="!features || features.length == 0" class="text-danger">
+          <td>No Data Found</td>
+        </tr>
+        <tr *ngFor="let f of features">
+          <td>{{f.FeatureID}}</td>
+          <td>{{f.FeatureName}}</td>
+          <td>
+            <a class="mr-3" (click)="DeleteFeature(f.FeatureID)"><span class="fa fa-trash fa-lg text-danger"></span></a>
+            <a (click)="DetailsFeature(f.FeatureID)"><span class="fa fa-edit fa-lg text-info"></span></a>
+          </td>
+        </tr>
+  
+      </tbody>
+    </table>
+  </div>

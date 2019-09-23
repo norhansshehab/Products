@@ -1,0 +1,81 @@
+<h1 class="display-4 text-center">Products</h1>
+<hr />
+<div class="row">
+
+  <form class="col-md-4 mb-4">
+    <input type="hidden" [(ngModel)]="newproduct.ProdID" name="ProdID">
+
+    <div class="form-group">
+      <label>Product Name</label>
+      <input type="text" class="form-control" placeholder="Enter Product Name ..." [(ngModel)]="newproduct.ProdName"
+        name="ProdName" required />
+    </div>
+
+    <div class="form-group">
+      <label>Select Category</label>
+      <!-- (change)='GetCategoryFeatures(mySelectedCatID.value)' -->
+      <select class="form-control" [(ngModel)]="newproduct.CatID" name="CatID" #mySelectedCatID
+        (change)='GetCategoryFeatures(newproduct.CatID)'>
+        <option *ngFor="let Cat of categories" [value]="Cat.CatID">{{Cat.CatName}}</option>
+      </select>
+    </div>
+
+    <div *ngIf="features.length > 0" class="form-group">
+      <div *ngFor="let f of features; let F_idx = index">
+
+        <label>
+          {{f.FeatureName}}
+        </label>
+
+
+        <div class="row"
+          *ngFor="let pf of newproduct.ProductFeatureValues | myfilter:f.FeatureID ; let PFV_idx = index;">
+
+          <input type="hidden" [(ngModel)]="pf.ProdID" name="pfProdID">
+          <input type="hidden" [(ngModel)]="pf.FeatureID" name="pfFeatureID">
+
+          <div class="col-md-9 mb-1">
+            <input type="text" class="form-control" flareNode="" ng-reflect-model="{'Value':'pf.Value'}" [(ngModel)]="pf.Value" name="pf-{{F_idx+''+PFV_idx}}" />
+          </div>
+
+          <div class="col-md-3" *ngIf="PFV_idx == 0">
+              <span class="fa fa-plus" (click)="AddValue(pf.ProdID, pf.FeatureID)"></span>
+          </div>
+          <div class="col-md-3" *ngIf="PFV_idx > 0">
+              <span class="fa fa-times text-danger" (click)="RemoveValue(pf, PFV_idx)"></span>
+          </div>
+          
+        </div>
+
+      </div>
+    </div>
+
+    <button [disabled]="flag" class="btn btn-primary mr-3" (click)="AddNewProduct()">Add New Product</button>
+    <button [disabled]="!flag" class="btn btn-info" (click)="UpdateProduct()">Update</button>
+
+  </form>
+
+  <table class="table table-responsive table-hover col-md-8">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Product Name</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="!products || products.length == 0" class="text-danger">
+        <td>No Data Found</td>
+      </tr>
+      <tr *ngFor="let p of products">
+        <td>{{p.ProdID}}</td>
+        <td>{{p.ProdName}}</td>
+        <td>
+          <a class="mr-3" (click)="DeleteProduct(p.ProdID)"><span class="fa fa-trash fa-lg text-danger"></span></a>
+          <a (click)="DetailsProduct(p.ProdID)"><span class="fa fa-edit fa-lg text-info"></span></a>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
